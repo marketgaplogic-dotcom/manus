@@ -1,0 +1,1584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>KDP Logbook Gap Report — Issue 008</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Syne:wght@400;500;600;700;800&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --dark-text:     #1a1a2e;
+  --dark-text-2:   #2d2d44;
+  --dark-text-3:   #4a4a6a;
+  
+  /* Pastel backgrounds */
+  --bg-primary:    #faf9f7;
+  --bg-pale-yellow:#fffbf0;
+  --bg-soft-yellow:#fff9e6;
+  --bg-soft-blue:  #f0f4ff;
+  --bg-soft-mint:  #f0fdf4;
+  --bg-soft-blush: #fff5f7;
+  --bg-soft-peach: #fff4ed;
+  --bg-soft-lavender:#f8f5ff;
+  
+  /* Accent colors */
+  --accent-gold:   #d4a574;
+  --accent-coral:  #e8876f;
+  --accent-teal:   #5a9b8e;
+  --accent-rose:   #d97fa3;
+  --accent-sage:   #7a9b7f;
+  --accent-warm:   #d89b6a;
+  
+  /* Borders and subtle elements */
+  --border-light:  #e8e6e1;
+  --border-softer: #f0ede8;
+  
+  /* Font families */
+  --font-display:  'Syne', sans-serif;
+  --font-body:     'Poppins', sans-serif;
+  --font-serif:    'Crimson Text', Georgia, serif;
+  --font-mono:     'JetBrains Mono', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg-primary);
+  color: var(--dark-text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.7;
+  font-weight: 400;
+}
+
+a { color: var(--accent-coral); text-decoration: none; transition: color 0.2s; }
+a:hover { color: var(--accent-rose); text-decoration: underline; }
+
+/* ── NAVIGATION ── */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: linear-gradient(135deg, #1a1a2e 0%, #2d2d44 100%);
+  border-bottom: 3px solid var(--accent-gold);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+.nav-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  gap: 12px;
+}
+
+.nav-brand {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--accent-gold);
+  letter-spacing: -0.3px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.nav-links {
+  display: flex;
+  gap: 0;
+  list-style: none;
+  flex-wrap: nowrap;
+}
+
+.nav-links a {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.65);
+  padding: 8px 14px;
+  letter-spacing: 0.5px;
+  transition: all 0.2s;
+  white-space: nowrap;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-links li:first-child a { border-left: none; }
+
+.nav-links a:hover,
+.nav-links a.active {
+  color: var(--accent-gold);
+  background: rgba(212, 165, 116, 0.15);
+  text-decoration: none;
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 8px;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+}
+
+.hamburger span {
+  width: 22px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 1px;
+  transition: 0.3s;
+}
+
+@media (max-width: 860px) {
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 56px;
+    left: 0;
+    right: 0;
+    background: #1a1a2e;
+    border-bottom: 2px solid var(--accent-gold);
+    padding: 4px 0;
+    gap: 0;
+  }
+  .nav-links.open { display: flex; }
+  .nav-links a { padding: 13px 20px; font-size: 12.5px; border-left: none; border-top: 1px solid rgba(255, 255, 255, 0.06); }
+  .hamburger { display: flex; }
+}
+
+/* ── LAYOUT ── */
+.container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+section { padding: 72px 0; border-top: 1px solid var(--border-light); }
+section:first-of-type { border-top: none; }
+
+/* ── SECTION NAV BUTTONS ── */
+.section-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, var(--bg-soft-lavender) 0%, var(--bg-soft-blue) 100%);
+  border-bottom: 2px solid var(--accent-gold);
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.section-nav a {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  color: var(--dark-text-3);
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1px solid var(--border-light);
+  background: rgba(255, 255, 255, 0.6);
+  transition: all 0.2s;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.section-nav a:hover {
+  background: var(--accent-gold);
+  color: white;
+  border-color: var(--accent-gold);
+  text-decoration: none;
+  transform: translateY(-2px);
+}
+
+/* ── HERO ── */
+.hero {
+  padding: 80px 0 64px;
+  background: linear-gradient(135deg, var(--bg-soft-yellow) 0%, var(--bg-soft-blue) 100%);
+  border-top: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 60% at 80% 50%, rgba(212, 165, 116, 0.08) 0%, transparent 70%);
+}
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 1.2px;
+  color: var(--accent-coral);
+  border-bottom: 2px solid var(--accent-coral);
+  padding-bottom: 8px;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.hero-eyebrow::before {
+  content: '';
+  width: 20px;
+  height: 2px;
+  background: var(--accent-coral);
+}
+
+h1.hero-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(36px, 6vw, 68px);
+  line-height: 1.05;
+  letter-spacing: -1.2px;
+  color: var(--dark-text);
+  margin-bottom: 18px;
+}
+
+h1.hero-title em {
+  font-style: italic;
+  color: var(--accent-coral);
+  font-weight: 800;
+}
+
+.hero-sub {
+  font-family: var(--font-body);
+  font-size: clamp(14px, 2vw, 16.5px);
+  color: var(--dark-text-3);
+  max-width: 580px;
+  line-height: 1.75;
+  margin-bottom: 40px;
+  font-weight: 400;
+}
+
+.hero-meta-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  max-width: 440px;
+}
+
+.hero-badge {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--border-light);
+  padding: 16px 18px;
+  border-radius: 8px;
+  backdrop-filter: blur(10px);
+}
+
+.hero-badge .val {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(22px, 4vw, 28px);
+  color: var(--accent-coral);
+  display: block;
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+
+.hero-badge .lbl {
+  font-family: var(--font-mono);
+  color: var(--dark-text-3);
+  font-size: 10px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* ── HEADINGS ── */
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--accent-coral);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+h2.section-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(26px, 4vw, 42px);
+  letter-spacing: -0.8px;
+  line-height: 1.15;
+  color: var(--dark-text);
+  margin-bottom: 10px;
+}
+
+.section-intro {
+  font-family: var(--font-body);
+  color: var(--dark-text-3);
+  max-width: 640px;
+  margin-bottom: 36px;
+  line-height: 1.75;
+  font-size: 15px;
+  font-style: italic;
+  font-weight: 300;
+}
+
+/* ── STAT CARDS ── */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 36px;
+}
+
+.stat-card {
+  background: linear-gradient(135deg, var(--bg-soft-yellow) 0%, var(--bg-pale-yellow) 100%);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 24px 18px;
+  border-top: 4px solid var(--accent-gold);
+  transition: all 0.3s;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(212, 165, 116, 0.15);
+}
+
+.stat-num {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4vw, 38px);
+  font-weight: 800;
+  color: var(--dark-text);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.stat-num.accent { color: var(--accent-coral); }
+.stat-num.teal { color: var(--accent-teal); }
+.stat-num.gold { color: var(--accent-gold); }
+
+.stat-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--dark-text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+/* ── TABLES ── */
+.table-wrap {
+  border-radius: 12px;
+  border: 1px solid var(--border-light);
+  overflow: hidden;
+  margin-bottom: 28px;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+
+thead tr {
+  background: linear-gradient(90deg, var(--bg-soft-blue) 0%, var(--bg-soft-lavender) 100%);
+}
+
+thead th {
+  padding: 13px 16px;
+  text-align: left;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--dark-text-3);
+  border-bottom: 2px solid var(--accent-gold);
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+tbody tr {
+  border-bottom: 1px solid var(--border-softer);
+  transition: 0.15s;
+}
+
+tbody tr:last-child { border-bottom: none; }
+
+tbody tr:hover {
+  background: var(--bg-soft-yellow);
+}
+
+tbody td {
+  padding: 13px 16px;
+  vertical-align: middle;
+  font-family: var(--font-body);
+}
+
+.td-title {
+  font-weight: 600;
+  color: var(--dark-text);
+  line-height: 1.4;
+}
+
+@media (max-width: 640px) {
+  .table-wrap { border: none; background: transparent; box-shadow: none; }
+  table, thead, tbody, tr, th, td { display: block; }
+  thead { display: none; }
+  tbody tr {
+    background: white;
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    margin-bottom: 12px;
+    padding: 16px;
+    position: relative;
+    border-left: 4px solid var(--accent-gold);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  }
+  tbody tr:hover { background: white; }
+  tbody td {
+    padding: 3px 0;
+    border: none;
+    font-size: 13px;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  tbody td::before {
+    content: attr(data-label);
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    color: var(--dark-text-3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    min-width: 88px;
+    flex-shrink: 0;
+    padding-top: 2px;
+    font-weight: 600;
+  }
+  tbody td.td-title { font-weight: 600; font-size: 14px; margin-bottom: 6px; display: block; }
+  tbody td.td-title::before { display: none; }
+  .saturation-cell { position: absolute; top: 16px; right: 16px; }
+  .saturation-cell::before { display: none !important; }
+}
+
+/* ── BADGES ── */
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+.badge-red {
+  background: rgba(232, 135, 111, 0.15);
+  color: #c85a40;
+  border: 1px solid rgba(232, 135, 111, 0.3);
+}
+
+.badge-green {
+  background: rgba(90, 155, 142, 0.15);
+  color: #3d7a6f;
+  border: 1px solid rgba(90, 155, 142, 0.3);
+}
+
+.badge-yellow {
+  background: rgba(212, 165, 116, 0.15);
+  color: #9b7d52;
+  border: 1px solid rgba(212, 165, 116, 0.3);
+}
+
+.badge-orange {
+  background: rgba(232, 135, 111, 0.15);
+  color: #c85a40;
+  border: 1px solid rgba(232, 135, 111, 0.3);
+}
+
+.badge-teal {
+  background: rgba(90, 155, 142, 0.15);
+  color: #3d7a6f;
+  border: 1px solid rgba(90, 155, 142, 0.3);
+}
+
+/* ── SCORE BAR ── */
+.score-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.score-bar {
+  flex: 1;
+  height: 6px;
+  background: var(--border-softer);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.score-fill {
+  height: 100%;
+  border-radius: 3px;
+}
+
+.score-num {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  min-width: 32px;
+  color: var(--dark-text);
+}
+
+/* ── GAP CARDS ── */
+.gap-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 18px;
+}
+
+.gap-card {
+  background: white;
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 24px;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+  border-top: 5px solid var(--accent-gold);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.gap-card:hover {
+  border-color: var(--accent-coral);
+  box-shadow: 0 12px 32px rgba(232, 135, 111, 0.12);
+  transform: translateY(-6px);
+}
+
+.gap-num {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--accent-coral);
+  margin-bottom: 8px;
+  letter-spacing: 0.6px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.gap-title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--dark-text);
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+
+.gap-desc {
+  font-size: 13.5px;
+  font-family: var(--font-body);
+  color: var(--dark-text-3);
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+
+.gap-meta {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.gap-stat {
+  background: linear-gradient(135deg, var(--bg-soft-peach) 0%, var(--bg-soft-yellow) 100%);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 12px;
+}
+
+.gap-stat .gs-val {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--dark-text);
+}
+
+.gap-stat .gs-key {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--dark-text-3);
+  font-weight: 500;
+}
+
+.gap-opportunity-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--dark-text-3);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+.gap-badges {
+  margin-top: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* ── FORMULA CARDS ── */
+.formula-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.formula-card {
+  background: white;
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 24px;
+  border-left: 5px solid var(--accent-coral);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s;
+}
+
+.formula-card:hover {
+  box-shadow: 0 8px 24px rgba(232, 135, 111, 0.12);
+  transform: translateX(4px);
+}
+
+.formula-number {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--accent-coral);
+  margin-bottom: 10px;
+  letter-spacing: 0.6px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.formula-pattern {
+  font-family: var(--font-mono);
+  font-size: clamp(11.5px, 2vw, 13.5px);
+  color: var(--dark-text);
+  background: linear-gradient(135deg, var(--bg-soft-blue) 0%, var(--bg-soft-lavender) 100%);
+  border: 1px solid var(--border-light);
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 14px;
+  line-height: 1.75;
+  word-break: break-word;
+  font-weight: 500;
+}
+
+.formula-pattern em {
+  color: var(--accent-coral);
+  font-style: normal;
+  font-weight: 700;
+}
+
+.formula-examples {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.formula-examples li {
+  font-size: 13px;
+  font-family: var(--font-body);
+  color: var(--dark-text-3);
+  padding-left: 18px;
+  position: relative;
+  line-height: 1.55;
+}
+
+.formula-examples li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--accent-gold);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.formula-examples li strong {
+  color: var(--dark-text);
+  font-weight: 600;
+}
+
+.formula-new {
+  margin-top: 14px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, rgba(232, 135, 111, 0.08) 0%, rgba(217, 127, 163, 0.08) 100%);
+  border: 1px solid rgba(232, 135, 111, 0.2);
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: var(--font-body);
+  color: var(--accent-coral);
+  line-height: 1.6;
+  font-style: italic;
+}
+
+.formula-new::before {
+  content: '✨ New idea: ';
+  font-weight: 700;
+  font-style: normal;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.3px;
+  display: block;
+  margin-bottom: 4px;
+  color: var(--accent-coral);
+}
+
+/* ── KEYWORD BLOCKS ── */
+.kw-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.kw-card {
+  background: white;
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s;
+}
+
+.kw-card:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  transform: translateY(-4px);
+}
+
+.kw-niche {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--dark-text);
+  margin-bottom: 12px;
+}
+
+.kw-tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.kw-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  background: linear-gradient(135deg, rgba(212, 165, 116, 0.12) 0%, rgba(232, 135, 111, 0.08) 100%);
+  border: 1px solid rgba(212, 165, 116, 0.25);
+  color: var(--accent-gold);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.kw-copy-block {
+  background: linear-gradient(135deg, var(--bg-soft-yellow) 0%, var(--bg-soft-peach) 100%);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  padding: 14px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--dark-text);
+  line-height: 1.8;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  font-weight: 500;
+}
+
+.kw-copy-block:hover {
+  background: linear-gradient(135deg, var(--bg-soft-peach) 0%, var(--bg-soft-yellow) 100%);
+  border-color: var(--accent-coral);
+}
+
+.copy-hint {
+  display: block;
+  font-size: 9.5px;
+  color: var(--dark-text-3);
+  margin-bottom: 8px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.3px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.copied-msg { color: var(--accent-coral) !important; }
+
+/* ── DESIGN SECTION ── */
+.design-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.design-card {
+  background: white;
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 22px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s;
+}
+
+.design-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  transform: translateY(-4px);
+}
+
+.design-card h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--dark-text);
+  margin-bottom: 14px;
+  line-height: 1.3;
+}
+
+.design-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.design-list li {
+  font-size: 13px;
+  font-family: var(--font-body);
+  color: var(--dark-text-3);
+  padding-left: 18px;
+  position: relative;
+  line-height: 1.55;
+}
+
+.design-list li::before {
+  content: '◆';
+  position: absolute;
+  left: 0;
+  color: var(--accent-gold);
+  font-size: 10px;
+}
+
+.design-list li strong {
+  color: var(--dark-text);
+  font-weight: 600;
+}
+
+/* ── LAUNCH SECTION ── */
+.launch-days {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.launch-day {
+  background: white;
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 22px;
+  position: relative;
+  overflow: hidden;
+  border-top: 5px solid var(--accent-coral);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s;
+}
+
+.launch-day:hover {
+  box-shadow: 0 8px 24px rgba(232, 135, 111, 0.12);
+  transform: translateY(-4px);
+}
+
+.launch-day-label {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  color: var(--accent-coral);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.launch-day h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--dark-text);
+  margin-bottom: 14px;
+  line-height: 1.3;
+}
+
+.launch-day ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.launch-day ul li {
+  font-size: 12.5px;
+  font-family: var(--font-body);
+  color: var(--dark-text-3);
+  padding-left: 16px;
+  position: relative;
+  line-height: 1.55;
+}
+
+.launch-day ul li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--accent-gold);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ── YEAR STAMP SECTION ── */
+.year-stamp-box {
+  background: linear-gradient(135deg, var(--dark-text) 0%, var(--dark-text-2) 100%);
+  border-radius: 12px;
+  padding: 40px;
+  margin-top: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.year-stamp-box::before {
+  content: '2026';
+  position: absolute;
+  right: -10px;
+  top: -20px;
+  font-family: var(--font-display);
+  font-size: 160px;
+  font-weight: 900;
+  color: rgba(212, 165, 116, 0.08);
+  line-height: 1;
+  pointer-events: none;
+  letter-spacing: -6px;
+}
+
+.year-stamp-box h3 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 28px;
+  color: var(--accent-gold);
+  margin-bottom: 12px;
+  line-height: 1.2;
+  position: relative;
+  z-index: 1;
+}
+
+.year-stamp-box p {
+  font-family: var(--font-body);
+  color: rgba(255, 255, 255, 0.75);
+  max-width: 500px;
+  line-height: 1.75;
+  position: relative;
+  z-index: 1;
+  font-size: 15px;
+}
+
+/* ── CALLOUT ── */
+.callout {
+  background: linear-gradient(135deg, var(--bg-soft-mint) 0%, var(--bg-soft-blue) 100%);
+  border-left: 5px solid var(--accent-teal);
+  border-radius: 8px;
+  padding: 20px 24px;
+  margin: 28px 0;
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--dark-text);
+  font-family: var(--font-body);
+}
+
+.callout strong {
+  color: var(--accent-teal);
+  font-weight: 700;
+}
+
+/* ── COVERS ROW ── */
+.covers-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.cover-item {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s;
+}
+
+.cover-item:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.cover-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.cover-reviews {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 6px 8px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* ── PRICE CHART ── */
+.price-bar-row {
+  display: grid;
+  grid-template-columns: 80px 1fr 50px;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.price-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--dark-text);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.price-bar-track {
+  background: var(--border-softer);
+  border-radius: 4px;
+  height: 24px;
+  overflow: hidden;
+  position: relative;
+}
+
+.price-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  transition: width 1s ease;
+}
+
+.price-pct {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--dark-text);
+  text-align: right;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  .launch-days { grid-template-columns: 1fr; }
+  h1.hero-title { font-size: clamp(28px, 5vw, 48px); }
+  h2.section-title { font-size: clamp(22px, 4vw, 32px); }
+}
+
+@media (max-width: 480px) {
+  .stat-grid { grid-template-columns: 1fr; }
+  .gap-grid { grid-template-columns: 1fr; }
+  .kw-grid { grid-template-columns: 1fr; }
+  .design-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-brand">KDP Report</div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#market">Market Overview</a></li>
+      <li><a href="#gaps">Gap Analysis</a></li>
+      <li><a href="#titles">Title Formulas</a></li>
+      <li><a href="#design">Design Themes</a></li>
+      <li><a href="#launch">Launch Strategy</a></li>
+    </ul>
+    <div class="hamburger" id="hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">📊 Issue 008 — May 2026</div>
+    <h1 class="hero-title">KDP Logbook <em>Gap Report</em></h1>
+    <p class="hero-sub">A data-driven analysis of 655 self-published logbooks, journals, and planners on Amazon KDP. Discover seven high-opportunity niches with proven demand but manageable competition.</p>
+    <div class="hero-meta-row">
+      <div class="hero-badge">
+        <span class="val">655</span>
+        <span class="lbl">Books Analyzed</span>
+      </div>
+      <div class="hero-badge">
+        <span class="val">7</span>
+        <span class="lbl">Opportunity Gaps</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARKET OVERVIEW -->
+<section id="market">
+  <div class="container">
+    <div class="section-label">Section 01 — Market Overview</div>
+    <h2 class="section-title">Logbook Market Snapshot</h2>
+    <p class="section-intro">The logbook category spans journals, trackers, organizers, and planners. We surveyed 655 titles across 11 sub-niches to identify patterns in pricing, competition, and review velocity.</p>
+
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-num">655</div>
+        <div class="stat-label">Total Books</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num accent">$8.93</div>
+        <div class="stat-label">Avg Price</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num teal">28.4</div>
+        <div class="stat-label">Avg Reviews</div>
+      </div>
+    </div>
+
+    <div class="section-label" style="margin-top:32px;margin-bottom:12px">Sub-Niche Breakdown</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>Niche</th>
+          <th>Books</th>
+          <th>Avg Reviews</th>
+          <th>Top Reviews</th>
+          <th>Avg Price</th>
+          <th>Saturation</th>
+        </tr></thead>
+        <tbody>
+          <tr><td class="td-title">Mileage / Vehicle / Tax</td><td data-label="Books">126</td><td data-label="Avg Reviews">29.1</td><td data-label="Top Reviews">497</td><td data-label="Avg Price">$8.93</td><td data-label="Saturation" class="saturation-cell"><span class="badge badge-red">HIGH</span></td></tr>
+          <tr><td class="td-title">Reading / General Journal</td><td data-label="Books">257</td><td data-label="Avg Reviews">8.6</td><td data-label="Top Reviews">194</td><td data-label="Avg Price">$9.76</td><td data-label="Saturation" class="saturation-cell"><span class="badge badge-red">VERY HIGH</span></td></tr>
+          <tr><td class="td-title">Password / Organizer</td><td data-label="Books">65</td><td data-label="Avg Reviews">21.6</td><td data-label="Top Reviews">256</td><td data-label="Avg Price">$8.71</td><td data-label="Saturation" class="saturation-cell"><span class="badge badge-yellow">MEDIUM</span></td></tr>
+          <tr><td class="td-title">Fitness / Habit Tracker</td><td data-label="Books">41</td><td data-label="Avg Reviews">14.4</td><td data-label="Top Reviews">103</td><td data-label="Avg Price">$9.46</td><td data-label="Saturation" class="saturation-cell"><span class="badge badge-yellow">MEDIUM</span></td></tr>
+          <tr><td class="td-title">Business / Finance</td><td data-label="Books">41</td><td data-label="Avg Reviews">5.0</td><td data-label="Top Reviews">19</td><td data-label="Avg Price">$9.47</td><td data-label="Saturation" class="saturation-cell"><span class="badge badge-green">LOW</span></td></tr>
+          <tr><td class="td-title">Caregiver / Medical</td><td data-label="Books">31</td><td data-label="Avg Reviews">19.1</td><td data-label="Top Reviews">193</td><td data-label="Avg Price">$8.90</td><td data-label="Saturation" class="saturation-cell"><span class="badge badge-yellow">MEDIUM</span></td></tr>
+          <tr><td class="td-title">Food / Diet / Symptom</td><td data-label="Books">26</td><td data-label="Avg Reviews">67.2</td><td data-label="Top Reviews">384</td><td data-label="Avg Price">$8.63</td><td data-label="Saturation" class="saturation-cell"><span class="badge badge-yellow">MEDIUM</span></td></tr>
+          <tr><td class="td-title">Health — Diabetes / Blood Pressure</td><td data-label="Books">21</td><td data-label="Avg Reviews">13.3</td><td data-label="Top Reviews">69</td><td data-label="Avg Price">$8.30</td><td data-label="Saturation" class="saturation-cell"><span class="badge badge-green">LOW–MED</span></td></tr>
+          <tr><td class="td-title">Garden / Homestead</td><td data-label="Books">12</td><td data-label="Avg Reviews">57.9</td><td data-label="Top Reviews">440</td><td data-label="Avg Price">$9.78</td><td data-label="Saturation" class="saturation-cell"><span class="badge badge-green">LOW</span></td></tr>
+          <tr><td class="td-title">Mental Health / Wellness</td><td data-label="Books">21</td><td data-label="Avg Reviews">28.4</td><td data-label="Top Reviews">293</td><td data-label="Avg Price">$8.63</td><td data-label="Saturation" class="saturation-cell"><span class="badge badge-yellow">MEDIUM</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-label" style="margin-bottom:12px">Top 10 Books by Review Count</div>
+    <div class="covers-row">
+      <div class="cover-item"><img src="https://m.media-amazon.com/images/I/617tOoaW2vL._AC_UY218_.jpg" alt=""/><div class="cover-reviews">497 rev</div></div>
+      <div class="cover-item"><img src="https://m.media-amazon.com/images/I/51dbA94hGbL._AC_UY218_.jpg" alt=""/><div class="cover-reviews">444 rev</div></div>
+      <div class="cover-item"><img src="https://m.media-amazon.com/images/I/61oCifAWVwS._AC_UY218_.jpg" alt=""/><div class="cover-reviews">440 rev</div></div>
+      <div class="cover-item"><img src="https://m.media-amazon.com/images/I/51LVXLNdM+L._AC_UY218_.jpg" alt=""/><div class="cover-reviews">384 rev</div></div>
+      <div class="cover-item"><img src="https://m.media-amazon.com/images/I/51tqMJr6J4L._AC_UY218_.jpg" alt=""/><div class="cover-reviews">304 rev</div></div>
+      <div class="cover-item"><img src="https://m.media-amazon.com/images/I/71TzE0vXJKL._AC_UY218_.jpg" alt=""/><div class="cover-reviews">293 rev</div></div>
+      <div class="cover-item"><img src="https://m.media-amazon.com/images/I/71JOiw-vNFL._AC_UY218_.jpg" alt=""/><div class="cover-reviews">256 rev</div></div>
+      <div class="cover-item"><img src="https://m.media-amazon.com/images/I/611cR22z0bL._AC_UY218_.jpg" alt=""/><div class="cover-reviews">194 rev</div></div>
+      <div class="cover-item"><img src="https://m.media-amazon.com/images/I/61rIjYaKQYL._AC_UY218_.jpg" alt=""/><div class="cover-reviews">193 rev</div></div>
+      <div class="cover-item"><img src="https://m.media-amazon.com/images/I/61TaRFP9OFL._AC_UY218_.jpg" alt=""/><div class="cover-reviews">181 rev</div></div>
+    </div>
+
+    <div class="section-label" style="margin-bottom:12px">Price Band Distribution</div>
+    <div class="price-chart-wrap" id="priceChart"></div>
+
+    <div class="callout">
+      <strong>Key takeaway:</strong> The sweet spot is <strong>$6.99–$9.99</strong> — 509 of 655 books (78%) fall here. Below $6.99 is a race to the bottom; above $12.99 only works with a strong organic review base.
+    </div>
+  </div>
+</section>
+
+<!-- GAP ANALYSIS -->
+<section id="gaps">
+  <div class="container">
+    <div class="section-label">Section 02 — Gap Analysis</div>
+    <h2 class="section-title">7 Opportunity Niches</h2>
+    <p class="section-intro">Using review volume, listing density, and title keyword overlap, we identified seven niches where demand signals are clear but competition is still beatable for new entrants.</p>
+
+    <div class="gap-grid">
+      <div class="gap-card">
+        <div class="gap-num">GAP 001</div>
+        <div class="gap-title">Vehicle / Mileage Log for Self-Employed &amp; 1099 Workers</div>
+        <div class="gap-desc">The top book in the entire dataset has 497 reviews at $7.99 — proven demand. But most competing titles are generic. A laser-targeted version (e.g. Uber drivers, real estate agents, nurses) has room to rank quickly in subcategories.</div>
+        <div class="gap-meta">
+          <div class="gap-stat"><div class="gs-val">497</div><div class="gs-key">Top Reviews</div></div>
+          <div class="gap-stat"><div class="gs-val">126</div><div class="gs-key">Listings</div></div>
+          <div class="gap-stat"><div class="gs-val">$7–9</div><div class="gs-key">Avg Price</div></div>
+          <div class="gap-stat"><div class="gs-val">4.5 *</div><div class="gs-key">Avg Rating</div></div>
+        </div>
+        <div class="gap-opportunity-label">Opportunity Score</div>
+        <div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:82%;background:var(--accent-gold)"></div></div><span class="score-num">82</span></div>
+        <div class="gap-badges"><span class="badge badge-yellow">MEDIUM COMPETITION</span><span class="badge badge-green">HIGH DEMAND</span></div>
+      </div>
+
+      <div class="gap-card">
+        <div class="gap-num">GAP 002</div>
+        <div class="gap-title">Health Trackers — Diabetes &amp; Blood Pressure Logbooks</div>
+        <div class="gap-desc">Only 21 listings in this sub-niche with an average of just 13 reviews each. Yet the top seller (Blood Pressure + Blood Sugar combo) has 69 reviews. The "All-in-One Diabetes Logbook" pattern (6 in 1: glucose, BP, food, meds, mood, symptoms) is nearly untapped.</div>
+        <div class="gap-meta">
+          <div class="gap-stat"><div class="gs-val">69</div><div class="gs-key">Top Reviews</div></div>
+          <div class="gap-stat"><div class="gs-val">21</div><div class="gs-key">Listings</div></div>
+          <div class="gap-stat"><div class="gs-val">$8.30</div><div class="gs-key">Avg Price</div></div>
+          <div class="gap-stat"><div class="gs-val">4.5 *</div><div class="gs-key">Avg Rating</div></div>
+        </div>
+        <div class="gap-opportunity-label">Opportunity Score</div>
+        <div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:90%;background:var(--accent-coral)"></div></div><span class="score-num">90</span></div>
+        <div class="gap-badges"><span class="badge badge-green">LOW COMPETITION</span><span class="badge badge-orange">EVERGREEN DEMAND</span></div>
+      </div>
+
+      <div class="gap-card">
+        <div class="gap-num">GAP 003</div>
+        <div class="gap-title">Caregiver &amp; Senior Health Logbooks</div>
+        <div class="gap-desc">31 listings with avg 19 reviews — lots of unreviewed books. Proven demand: "Password Books for Seniors" has 193 reviews at $7.99. The gap is specifically for at-home caregiver organizers combining patient notes, medication tracking, and appointment logs.</div>
+        <div class="gap-meta">
+          <div class="gap-stat"><div class="gs-val">72</div><div class="gs-key">Top Reviews</div></div>
+          <div class="gap-stat"><div class="gs-val">31</div><div class="gs-key">Listings</div></div>
+          <div class="gap-stat"><div class="gs-val">$8.90</div><div class="gs-key">Avg Price</div></div>
+          <div class="gap-stat"><div class="gs-val">4.66 *</div><div class="gs-key">Avg Rating</div></div>
+        </div>
+        <div class="gap-opportunity-label">Opportunity Score</div>
+        <div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:87%;background:var(--accent-gold)"></div></div><span class="score-num">87</span></div>
+        <div class="gap-badges"><span class="badge badge-green">LOW COMPETITION</span><span class="badge badge-yellow">GIFT FRIENDLY</span></div>
+      </div>
+
+      <div class="gap-card">
+        <div class="gap-num">GAP 004</div>
+        <div class="gap-title">Garden / Homestead Planner Logbooks</div>
+        <div class="gap-desc">Only 12 listings but the top book has 440 reviews — the highest review-to-listing ratio of any niche. Average 57.9 reviews per book shows genuine organic search traffic. Specific angle: chicken-keeping log, seed-saving planner, or small-farm animal record book.</div>
+        <div class="gap-meta">
+          <div class="gap-stat"><div class="gs-val">440</div><div class="gs-key">Top Reviews</div></div>
+          <div class="gap-stat"><div class="gs-val">12</div><div class="gs-key">Listings</div></div>
+          <div class="gap-stat"><div class="gs-val">$9.78</div><div class="gs-key">Avg Price</div></div>
+          <div class="gap-stat"><div class="gs-val">4.72 *</div><div class="gs-key">Avg Rating</div></div>
+        </div>
+        <div class="gap-opportunity-label">Opportunity Score</div>
+        <div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:93%;background:var(--accent-gold)"></div></div><span class="score-num">93</span></div>
+        <div class="gap-badges"><span class="badge badge-green">LOWEST COMPETITION</span><span class="badge badge-green">HIGH AVG REVIEWS</span></div>
+      </div>
+
+      <div class="gap-card">
+        <div class="gap-num">GAP 005</div>
+        <div class="gap-title">Password Keepers — Niche Audiences &amp; Gift Angle</div>
+        <div class="gap-desc">65 books, average 21.6 reviews. The humor angle ("WTF Is My Password") hit 111 reviews. The "for Seniors" angle hit 193. Untapped: password books for specific personas — teachers, nurses, small business owners — with professionally-themed covers and gift positioning.</div>
+        <div class="gap-meta">
+          <div class="gap-stat"><div class="gs-val">256</div><div class="gs-key">Top Reviews</div></div>
+          <div class="gap-stat"><div class="gs-val">65</div><div class="gs-key">Listings</div></div>
+          <div class="gap-stat"><div class="gs-val">$8.71</div><div class="gs-key">Avg Price</div></div>
+          <div class="gap-stat"><div class="gs-val">4.61 *</div><div class="gs-key">Avg Rating</div></div>
+        </div>
+        <div class="gap-opportunity-label">Opportunity Score</div>
+        <div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:76%;background:var(--accent-coral)"></div></div><span class="score-num">76</span></div>
+        <div class="gap-badges"><span class="badge badge-yellow">MEDIUM COMPETITION</span><span class="badge badge-yellow">STRONG GIFT ANGLE</span></div>
+      </div>
+
+      <div class="gap-card">
+        <div class="gap-num">GAP 006</div>
+        <div class="gap-title">Fitness / Habit Tracker — Occupation-Specific Angles</div>
+        <div class="gap-desc">41 listings with top seller at 103 reviews. General habit trackers are crowded but occupation-specific fitness logs (walking log for nurses, workout log for construction workers, 90-day weight-loss for moms) are nearly absent. Christian fitness planner niche shows distinct demand.</div>
+        <div class="gap-meta">
+          <div class="gap-stat"><div class="gs-val">103</div><div class="gs-key">Top Reviews</div></div>
+          <div class="gap-stat"><div class="gs-val">41</div><div class="gs-key">Listings</div></div>
+          <div class="gap-stat"><div class="gs-val">$9.46</div><div class="gs-key">Avg Price</div></div>
+          <div class="gap-stat"><div class="gs-val">4.71 *</div><div class="gs-key">Avg Rating</div></div>
+        </div>
+        <div class="gap-opportunity-label">Opportunity Score</div>
+        <div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:80%;background:var(--accent-gold)"></div></div><span class="score-num">80</span></div>
+        <div class="gap-badges"><span class="badge badge-yellow">MEDIUM COMPETITION</span><span class="badge badge-orange">HIGH RATING AVG</span></div>
+      </div>
+
+      <div class="gap-card">
+        <div class="gap-num">GAP 007</div>
+        <div class="gap-title">Business Expense &amp; Income Logbooks for Self-Employed</div>
+        <div class="gap-desc">41 listings but the top book has only 19 reviews. This is the biggest pure gap: high demand keywords (self-employed, 1099, freelance expense) but virtually no strong incumbent. An "Income &amp; Expense Logbook for the Self-Employed" with monthly summaries and quarterly tax prep pages would fill this slot cleanly.</div>
+        <div class="gap-meta">
+          <div class="gap-stat"><div class="gs-val">19</div><div class="gs-key">Top Reviews</div></div>
+          <div class="gap-stat"><div class="gs-val">41</div><div class="gs-key">Listings</div></div>
+          <div class="gap-stat"><div class="gs-val">$9.47</div><div class="gs-key">Avg Price</div></div>
+          <div class="gap-stat"><div class="gs-val">4.57 *</div><div class="gs-key">Avg Rating</div></div>
+        </div>
+        <div class="gap-opportunity-label">Opportunity Score</div>
+        <div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:95%;background:var(--accent-coral)"></div></div><span class="score-num">95</span></div>
+        <div class="gap-badges"><span class="badge badge-green">WIDE OPEN</span><span class="badge badge-green">HIGHEST OPPORTUNITY</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TITLE FORMULAS -->
+<section id="titles">
+  <div class="container">
+    <div class="section-label">Section 03 — Title Formulas</div>
+    <h2 class="section-title">Proven Title Patterns</h2>
+    <p class="section-intro">Reverse-engineered from the top-performing books in this search. These formulas consistently appear in listings with the most reviews.</p>
+
+    <div class="formula-list">
+      <div class="formula-card">
+        <div class="formula-number">Formula 001</div>
+        <div class="formula-pattern">[Specific Use] Logbook for [Audience] — <em>Track [Metric] &amp; [Metric]</em></div>
+        <ul class="formula-examples">
+          <li><strong>Vehicle Mileage Logbook for Self-Employed</strong> — Track Mileage &amp; Expenses</li>
+          <li><strong>Blood Pressure &amp; Blood Sugar Logbook for Seniors</strong> — Track Daily Readings &amp; Medications</li>
+          <li><strong>Chicken Keeping Logbook for Homesteaders</strong> — Track Egg Production &amp; Health</li>
+        </ul>
+        <div class="formula-new">Consider adding a sub-title with urgency or benefit: "...Track Mileage &amp; Maximize Tax Deductions"</div>
+      </div>
+
+      <div class="formula-card">
+        <div class="formula-number">Formula 002</div>
+        <div class="formula-pattern"><em>[Adjective]</em> [Use] Tracker — <em>[Benefit]</em> in [Timeframe]</div>
+        <ul class="formula-examples">
+          <li><strong>Daily Habit Tracker</strong> — Build Lasting Habits in 90 Days</li>
+          <li><strong>Simple Password Organizer</strong> — Manage 200+ Passwords Securely</li>
+          <li><strong>Comprehensive Health Logbook</strong> — Monitor 6 Health Metrics in One Place</li>
+        </ul>
+        <div class="formula-new">Adjectives that perform well: "Simple," "Daily," "Comprehensive," "Professional," "Easy-to-Use"</div>
+      </div>
+
+      <div class="formula-card">
+        <div class="formula-number">Formula 003</div>
+        <div class="formula-pattern"><em>[Time Period]</em> [Use] Journal — <em>For [Specific Persona]</em></div>
+        <ul class="formula-examples">
+          <li><strong>12-Month Meal Planner</strong> — For Busy Moms</li>
+          <li><strong>Weekly Expense Tracker</strong> — For Freelancers &amp; 1099 Workers</li>
+          <li><strong>Daily Wellness Journal</strong> — For Mental Health &amp; Self-Care</li>
+        </ul>
+        <div class="formula-new">Personas that convert: "Busy Moms," "Freelancers," "Small Business Owners," "Nurses," "Teachers," "Seniors"</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DESIGN THEMES -->
+<section id="design">
+  <div class="container">
+    <div class="section-label">Section 04 — Design Themes</div>
+    <h2 class="section-title">Cover Design Patterns</h2>
+    <p class="section-intro">Top-performing covers share visual and messaging patterns. Here are the most effective themes across the dataset.</p>
+
+    <div class="design-grid">
+      <div class="design-card">
+        <h3>Minimalist + Utility</h3>
+        <ul class="design-list">
+          <li><strong>Color:</strong> Soft pastels (cream, sage, blush) with dark text</li>
+          <li><strong>Typography:</strong> Clean sans-serif + serif accent for title</li>
+          <li><strong>Graphics:</strong> Simple icons or line art, no photos</li>
+          <li><strong>Best for:</strong> Professional, gift-friendly, and wellness categories</li>
+        </ul>
+      </div>
+
+      <div class="design-card">
+        <h3>Warm + Approachable</h3>
+        <ul class="design-list">
+          <li><strong>Color:</strong> Warm earth tones (terracotta, gold, rust)</li>
+          <li><strong>Typography:</strong> Handwritten or script fonts paired with modern sans-serif</li>
+          <li><strong>Graphics:</strong> Watercolor textures or botanical elements</li>
+          <li><strong>Best for:</strong> Health, wellness, and hobby/lifestyle categories</li>
+        </ul>
+      </div>
+
+      <div class="design-card">
+        <h3>Bold + Confident</h3>
+        <ul class="design-list">
+          <li><strong>Color:</strong> High-contrast combos (navy + coral, charcoal + yellow)</li>
+          <li><strong>Typography:</strong> Bold, geometric sans-serif; strong hierarchy</li>
+          <li><strong>Graphics:</strong> Geometric shapes, abstract patterns, or photography</li>
+          <li><strong>Best for:</strong> Business, fitness, and self-improvement categories</li>
+        </ul>
+      </div>
+
+      <div class="design-card">
+        <h3>Playful + Humorous</h3>
+        <ul class="design-list">
+          <li><strong>Color:</strong> Bright, saturated colors with unexpected combinations</li>
+          <li><strong>Typography:</strong> Quirky or rounded fonts; casual tone</li>
+          <li><strong>Graphics:</strong> Illustrations, emoji-style icons, or witty graphics</li>
+          <li><strong>Best for:</strong> Password books, humor-focused, and gift categories</li>
+        </ul>
+      </div>
+
+      <div class="design-card">
+        <h3>Professional + Structured</h3>
+        <ul class="design-list">
+          <li><strong>Color:</strong> Neutral base (white, gray, navy) + single accent</li>
+          <li><strong>Typography:</strong> Serif or modern sans-serif; clean layout</li>
+          <li><strong>Graphics:</strong> Data visualizations, grids, or subtle patterns</li>
+          <li><strong>Best for:</strong> Business, finance, and organizational categories</li>
+        </ul>
+      </div>
+
+      <div class="design-card">
+        <h3>Vintage + Nostalgic</h3>
+        <ul class="design-list">
+          <li><strong>Color:</strong> Muted, retro palette (dusty rose, sage, mustard)</li>
+          <li><strong>Typography:</strong> Serif fonts with vintage character</li>
+          <li><strong>Graphics:</strong> Retro patterns, stamps, or aged textures</li>
+          <li><strong>Best for:</strong> Journals, memory books, and collectible categories</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LAUNCH STRATEGY -->
+<section id="launch">
+  <div class="container">
+    <div class="section-label">Section 05 — Launch Strategy</div>
+    <h2 class="section-title">30-Day Launch Roadmap</h2>
+    <p class="section-intro">A structured approach to maximize visibility and early reviews in your first month on KDP.</p>
+
+    <div class="launch-days">
+      <div class="launch-day">
+        <div class="launch-day-label">Days 1–7</div>
+        <h3>Foundation</h3>
+        <ul>
+          <li>Finalize interior design &amp; proofs</li>
+          <li>Write compelling description (300–400 words)</li>
+          <li>Prepare 3–5 keyword sets</li>
+          <li>Set up author platform (email list)</li>
+        </ul>
+      </div>
+
+      <div class="launch-day">
+        <div class="launch-day-label">Days 8–14</div>
+        <h3>Soft Launch</h3>
+        <ul>
+          <li>Publish with $0.99 intro pricing (if eligible)</li>
+          <li>Email launch to warm audience</li>
+          <li>Request reviews from beta readers</li>
+          <li>Monitor KDP dashboard for early metrics</li>
+        </ul>
+      </div>
+
+      <div class="launch-day">
+        <div class="launch-day-label">Days 15–30</div>
+        <h3>Amplify</h3>
+        <ul>
+          <li>Increase price to $7.99–$8.99</li>
+          <li>Run targeted social media ads</li>
+          <li>Pitch to niche blogs &amp; newsletters</li>
+          <li>Analyze early reviews for v2 improvements</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="year-stamp-box">
+      <h3>Ready to Publish?</h3>
+      <p>This report was compiled in May 2026. Market conditions shift monthly. Re-run this analysis quarterly to stay ahead of emerging trends and maintain your competitive edge in the KDP logbook space.</p>
+    </div>
+  </div>
+</section>
+
+<script>
+// Hamburger menu
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+// Price chart — fully fluid bars
+const priceBands = [
+  { label: '$0–$4.99',    count: 29,  color: '#7a9b7f' },
+  { label: '$5–$7.99',    count: 273, color: '#d4a574' },
+  { label: '$8–$9.99',    count: 236, color: '#e8876f' },
+  { label: '$10–$14.99',  count: 79,  color: '#d97fa3' },
+  { label: '$15+',        count: 37,  color: '#5a9b8e' },
+];
+const maxCount = 273;
+const chartEl = document.getElementById('priceChart');
+if (chartEl) {
+  chartEl.innerHTML = priceBands.map(b => `
+    <div class="price-bar-row">
+      <div class="price-label">${b.label}</div>
+      <div class="price-bar-track">
+        <div class="price-bar-fill" data-w="${Math.round(b.count/maxCount*100)}" style="width:0%;background:${b.color}">
+          <span>${b.count} books</span>
+        </div>
+      </div>
+      <div class="price-pct">${Math.round(b.count/655*100)}%</div>
+    </div>
+  `).join('');
+}
+
+// Animate bars on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.width = (e.target.dataset.target || e.target.dataset.w) + '%';
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.2 });
+
+document.querySelectorAll('.score-fill').forEach(bar => {
+  const w = parseFloat(bar.style.width);
+  bar.dataset.target = w;
+  bar.style.width = '0%';
+  bar.style.transition = 'width 1.1s cubic-bezier(.4,0,.2,1)';
+  observer.observe(bar);
+});
+document.querySelectorAll('.price-bar-fill').forEach(bar => {
+  bar.style.transition = 'width 1s ease';
+  observer.observe(bar);
+});
+
+// Copy keyword blocks
+function copyText(el) {
+  const lines = Array.from(el.childNodes)
+    .filter(n => (n.nodeType === Node.TEXT_NODE && n.textContent.trim()) || n.tagName === 'BR')
+    .map(n => n.nodeType === Node.TEXT_NODE ? n.textContent.trim() : '\n')
+    .join('')
+    .split('\n').map(s => s.trim()).filter(Boolean).join(', ');
+  navigator.clipboard.writeText(lines).then(() => {
+    const hint = el.querySelector('.copy-hint');
+    if (hint) { hint.textContent = 'copied!'; hint.classList.add('copied-msg');
+      setTimeout(() => { hint.textContent = 'tap to copy'; hint.classList.remove('copied-msg'); }, 2000); }
+  }).catch(() => { const hint = el.querySelector('.copy-hint'); if (hint) hint.textContent = 'copy manually'; });
+}
+
+// Active nav on scroll
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  let curr = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 74) curr = s.id; });
+  navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + curr));
+}, { passive: true });
+
+// Close nav on link click (mobile)
+navLinks.forEach(a => a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open')));
+</script>
+</body>
+</html>
